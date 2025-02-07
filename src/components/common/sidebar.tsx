@@ -3,6 +3,9 @@ import Image from "next/image";
 import { useCallback, useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import Search from "@/components/common/search";
+import Menu from "@/components/common/menu";
+import Footer from "@/components/common/footer";
 
 interface ISidebarProps {
   isSidebarOpen: boolean;
@@ -99,6 +102,10 @@ export default function Sidebar({
             <X className="size-[20px]" />
           </button>
         </div>
+
+        <Search />
+        <Menu />
+        <Footer />
       </div>
 
       <div
