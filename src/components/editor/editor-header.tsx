@@ -2,6 +2,7 @@
 
 import { Settings, Share2, Trash2, Upload } from "lucide-react";
 import { useEditorStore } from "@/store/editor-store";
+import { Tooltip } from "react-tooltip";
 
 interface IEditorHeaderProps {
   title?: string;
@@ -51,6 +52,34 @@ export default function EditorHeader({ title }: IEditorHeaderProps) {
           >
             <Trash2 className="size-[20px] text-red-500" />
           </button>
+
+          <Tooltip
+            className="z-50"
+            id="settings-tooltip"
+            place="bottom"
+            content="Settings"
+          />
+
+          <Tooltip
+            className="z-50"
+            id="upload-tooltip"
+            place="bottom"
+            content="Upload"
+          />
+
+          <Tooltip
+            className="z-50"
+            id="share-tooltip"
+            place="bottom"
+            content="Share"
+          />
+
+          <Tooltip
+            className="z-50"
+            id="trash-tooltip"
+            place="bottom"
+            content="Clear"
+          />
         </div>
       </div>
     </div>

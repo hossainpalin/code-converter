@@ -1,6 +1,7 @@
 "use client";
 
 import { Copy } from "lucide-react";
+import { Tooltip } from "react-tooltip";
 
 interface IResultHeaderProps {
   title?: string;
@@ -15,6 +16,8 @@ export default function ResultHeader({ title }: IResultHeaderProps) {
         <button data-tooltip-id="copy-tooltip" className="editor-header-button">
           <Copy className="editor-header-button-text" />
         </button>
+
+        <Tooltip id="copy-tooltip" place="bottom" content="Copy" />
       </div>
     </div>
   );
