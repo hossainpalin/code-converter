@@ -4,6 +4,8 @@ import EditorPanel from "@/components/editor/editor-panel";
 import { useEffect, useState } from "react";
 import { HTMLTOJSX_DEFAULT_VALUE } from "@/constant/data";
 import { useEditorStore } from "@/store/editor-store";
+import { useUploadStore } from "@/store/upload-store";
+import UploadModal from "@/components/upload/modal";
 
 export default function HTMLToJSXComponent() {
   const [data, setData] = useState<string>("");
@@ -11,6 +13,7 @@ export default function HTMLToJSXComponent() {
   const [error, setError] = useState<null | string>(null);
 
   const { sourceCode, setSourceCode } = useEditorStore((state) => state);
+  const { uploadedFile, fetchedFile } = useUploadStore((state) => state);
 
   // Convert html to jsx
   useEffect(() => {
@@ -44,10 +47,11 @@ export default function HTMLToJSXComponent() {
     fetchData();
   }, [sourceCode]);
 
-  // Set initial default value
+  // Set initial default value and upload content for editor
   useEffect(() => {
-    setSourceCode(HTMLTOJSX_DEFAULT_VALUE);
-  }, [setSourceCode]);
+    const uploadedContent = uploadedFile || fetchedFile;
+    setSourceCode(uploadedContent || HTMLTOJSX_DEFAULT_VALUE);
+  }, [setSourceCode, uploadedFile, fetchedFile]);
 
   if (isLoading) {
     return (
@@ -76,6 +80,7 @@ export default function HTMLToJSXComponent() {
         editorDefaultValue={sourceCode}
         resultValue={data}
       />
+      <UploadModal acceptedFileTypes={"text/html"} />
     </div>
   );
 }

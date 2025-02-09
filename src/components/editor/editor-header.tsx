@@ -3,6 +3,7 @@
 import { Settings, Share2, Trash2, Upload } from "lucide-react";
 import { useEditorStore } from "@/store/editor-store";
 import { Tooltip } from "react-tooltip";
+import { useUploadStore } from "@/store/upload-store";
 
 interface IEditorHeaderProps {
   title?: string;
@@ -10,11 +11,21 @@ interface IEditorHeaderProps {
 
 export default function EditorHeader({ title }: IEditorHeaderProps) {
   const { sourceCode, setSourceCode } = useEditorStore((state) => state);
+  const { setIsUploadModalOpen, isUploadModalOpen } = useUploadStore(
+    (state) => state
+  );
 
   // Clear editor
   const clearEditor = () => {
     if (sourceCode) {
       setSourceCode("");
+    }
+  };
+
+  // Handle upload modal
+  const handleUpload = () => {
+    if (!isUploadModalOpen) {
+      setIsUploadModalOpen(true);
     }
   };
 
@@ -32,6 +43,7 @@ export default function EditorHeader({ title }: IEditorHeaderProps) {
           </button>
 
           <button
+            onClick={handleUpload}
             data-tooltip-id="upload-tooltip"
             className="editor-header-button"
           >
