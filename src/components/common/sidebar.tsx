@@ -104,7 +104,7 @@ export default function Sidebar({
         </div>
 
         <Search />
-        <Menu />
+        <Menu onCloseAction={setIsSidebarOpen} />
         <Footer />
       </div>
 

@@ -37,7 +37,7 @@ export default function EditorPanel({
       </div>
 
       <div className="hidden size-full border-l border-gray-200 dark:border-neutral-700 sm:block sm:w-1/2">
-        <ResultHeader title={resultTitle} />
+        <ResultHeader contentToCopy={resultValue} title={resultTitle} />
         <ResultEditor
           language={resultLanguage}
           content={resultValue}
@@ -57,7 +57,7 @@ export default function EditorPanel({
       </div>
 
       <div className="size-full border-l border-gray-200 dark:border-neutral-700 sm:hidden sm:w-1/2">
-        <ResultHeader title={resultTitle} />
+        <ResultHeader contentToCopy={resultValue} title={resultTitle} />
         <ResultEditor
           language={resultLanguage}
           content={resultValue}

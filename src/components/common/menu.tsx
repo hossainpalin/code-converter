@@ -5,7 +5,11 @@ import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 import { cn } from "@/lib/utils";
 
-export default function Menu() {
+interface IMenuProps {
+  onCloseAction: (isOpen: boolean) => void;
+}
+
+export default function Menu({ onCloseAction }: IMenuProps) {
   const pathname = usePathname();
 
   // All routes
@@ -41,7 +45,11 @@ export default function Menu() {
   return (
     <ul className="flex size-full flex-col items-start justify-start gap-y-2 overflow-y-auto text-[14px] font-light text-gray-700">
       {routes.map(({ id, name, href, isActive }) => (
-        <li key={id} className="relative w-full">
+        <li
+          onClick={() => onCloseAction(false)}
+          key={id}
+          className="relative w-full"
+        >
           <Link
             className={cn(
               "block w-full rounded-md p-1 pl-3 font-normal transition-colors hover:bg-neutral-200 hover:text-gray-800 text-gray-600 dark:text-gray-300 dark:hover:bg-neutral-700 dark:hover:text-gray-300",
