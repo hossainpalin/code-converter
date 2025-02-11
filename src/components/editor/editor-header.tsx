@@ -4,6 +4,7 @@ import { Settings, Share2, Trash2, Upload } from "lucide-react";
 import { useEditorStore } from "@/store/editor-store";
 import { Tooltip } from "react-tooltip";
 import { useUploadStore } from "@/store/upload-store";
+import { useSettingStore } from "@/store/setting-store";
 
 interface IEditorHeaderProps {
   title?: string;
@@ -12,6 +13,9 @@ interface IEditorHeaderProps {
 export default function EditorHeader({ title }: IEditorHeaderProps) {
   const { sourceCode, setSourceCode } = useEditorStore((state) => state);
   const { setIsUploadModalOpen, isUploadModalOpen } = useUploadStore(
+    (state) => state
+  );
+  const { setIsSettingsModalOpen, isSettingsModalOpen } = useSettingStore(
     (state) => state
   );
 
@@ -29,6 +33,13 @@ export default function EditorHeader({ title }: IEditorHeaderProps) {
     }
   };
 
+  // Handle settings modal
+  const handleSettings = () => {
+    if (!isSettingsModalOpen) {
+      setIsSettingsModalOpen(true);
+    }
+  };
+
   return (
     <div className="editor-header">
       <div className="flex size-full items-center justify-between">
@@ -36,6 +47,7 @@ export default function EditorHeader({ title }: IEditorHeaderProps) {
 
         <div className="flex items-center justify-center gap-x-3">
           <button
+            onClick={handleSettings}
             data-tooltip-id="settings-tooltip"
             className="editor-header-button"
           >
