@@ -15,7 +15,8 @@ export default function HTMLToJSXComponent() {
 
   const [settings, setSettings] = useState({
     title: "HTML to JSX",
-    createFunction: false
+    createFunction: false,
+    createArrowFunction: false
   });
 
   const { sourceCode, setSourceCode } = useEditorStore((state) => state);
@@ -47,12 +48,28 @@ export default function HTMLToJSXComponent() {
 
         if (!result?.error) {
           setIsLoading(false);
-          if (result?.jsx && settings.createFunction) {
+          if (result?.jsx) {
             // Apply function component template
-            setData(`export const Foo = () => (
-             ${result.jsx})`);
-          } else {
-            setData(result?.jsx);
+            if (settings.createFunction) {
+              setData(`export default function Foo() {
+              return (
+                ${result.jsx}
+                );
+              }`);
+              return;
+            }
+
+            if (settings.createArrowFunction) {
+              setData(`const Foo = () => {
+              return (
+                ${result.jsx}
+                );
+              }
+              export default Foo`);
+              return;
+            }
+
+            setData(result.jsx);
           }
         }
       } catch (error) {
@@ -63,7 +80,7 @@ export default function HTMLToJSXComponent() {
     };
 
     fetchData();
-  }, [sourceCode, settings.createFunction]);
+  }, [sourceCode, settings]);
 
   // Set initial default value and upload content for editor
   useEffect(() => {
@@ -106,11 +123,26 @@ export default function HTMLToJSXComponent() {
             </label>
 
             <input
-              disabled={!sourceCode}
+              disabled={!sourceCode || settings.createArrowFunction}
               type="checkbox"
               className="size-[18px] cursor-pointer disabled:cursor-not-allowed"
               name="createFunction"
               checked={settings.createFunction}
+              onChange={handleSettingsChange}
+            />
+          </div>
+
+          <div className="flex items-center justify-between gap-x-2 rounded-md bg-gray-200 p-2 px-3 dark:bg-neutral-700/50">
+            <label className="text-gray-700 dark:text-gray-300">
+              Create arrow function component
+            </label>
+
+            <input
+              disabled={!sourceCode || settings.createFunction}
+              type="checkbox"
+              className="size-[18px] cursor-pointer disabled:cursor-not-allowed"
+              name="createArrowFunction"
+              checked={settings.createArrowFunction}
               onChange={handleSettingsChange}
             />
           </div>

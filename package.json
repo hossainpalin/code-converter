@@ -37,6 +37,7 @@
     "react-dom": "^19",
     "react-tooltip": "^5.28.0",
     "tailwind-merge": "^3.0.1",
+    "prettier": "^3.4.2",
     "zustand": "^5.0.3"
   },
   "devDependencies": {
@@ -56,7 +57,6 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.4.2",
     "postcss": "^8.4.38",
-    "prettier": "^3.4.2",
     "tailwindcss": "^3.4.4",
     "typescript": "^5"
   }

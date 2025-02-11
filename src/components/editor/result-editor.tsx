@@ -2,6 +2,8 @@
 
 import Editor from "@monaco-editor/react";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
+import { prettierFormatter } from "@/utils/prettier-formatter";
 
 interface IResultEditorProps {
   height?: string;
@@ -14,7 +16,26 @@ export default function ResultEditor({
   language,
   content
 }: IResultEditorProps) {
+  const [formattedCode, setFormattedCode] = useState<string>("");
   const { theme } = useTheme();
+
+  // Format code using prettier
+  useEffect(() => {
+    const formattedCode = async () => {
+      const response = await prettierFormatter({
+        code: content!,
+        language: language!
+      });
+
+      if (response?.success) {
+        setFormattedCode(response.formattedCode!);
+      } else {
+        // TODO: Handle error
+      }
+    };
+
+    formattedCode();
+  }, [content, language]);
 
   return (
     <Editor
@@ -23,8 +44,8 @@ export default function ResultEditor({
       language={language}
       theme={theme === "dark" ? "vs-dark" : "vs-light"}
       defaultLanguage={language}
-      value={content}
-      defaultValue={content}
+      value={formattedCode || content}
+      defaultValue={formattedCode || content}
       options={{
         overviewRulerBorder: false,
         automaticLayout: true,
