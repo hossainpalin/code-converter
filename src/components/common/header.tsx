@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Sidebar from "@/components/common/sidebar";
 import { useState } from "react";
+import { Tooltip } from "react-tooltip";
 
 export default function Header() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -28,6 +29,7 @@ export default function Header() {
 
         <div className="flex items-center gap-x-2">
           <button
+            data-tooltip-id="theme-tooltip"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             className="cursor-pointer rounded-lg bg-indigo-500/60 p-1.5 text-neutral-100 hover:bg-indigo-500"
           >
@@ -39,6 +41,7 @@ export default function Header() {
           </button>
 
           <Link
+            data-tooltip-id="github-tooltip"
             className="rounded-lg bg-indigo-500/60 p-1.5 hover:bg-indigo-500"
             href="/"
           >
@@ -50,6 +53,20 @@ export default function Header() {
               height={32}
             />
           </Link>
+
+          <Tooltip
+            className=""
+            id="theme-tooltip"
+            place="bottom"
+            content={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+          />
+
+          <Tooltip
+            className=""
+            id="github-tooltip"
+            place="bottom"
+            content="GitHub"
+          />
         </div>
       </div>
       <Sidebar
