@@ -7,6 +7,7 @@ import { useEditorStore } from "@/store/editor-store";
 import { useUploadStore } from "@/store/upload-store";
 import UploadModal from "@/components/upload/modal";
 import SettingsModal from "@/components/settings/modal";
+import AlertModal from "@/components/alert/alert-modal";
 
 export default function HTMLToJSXComponent() {
   const [data, setData] = useState<string>("");
@@ -32,6 +33,7 @@ export default function HTMLToJSXComponent() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setError(null);
         const response = await fetch("/api/html-to-jsx", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -71,6 +73,9 @@ export default function HTMLToJSXComponent() {
 
             setData(result.jsx);
           }
+        } else {
+          setError(result.error);
+          setIsLoading(false);
         }
       } catch (error) {
         console.error(error);
@@ -92,14 +97,6 @@ export default function HTMLToJSXComponent() {
     return (
       <div className="flex h-[calc(100%-50px)] w-full items-center justify-center text-gray-700 dark:text-gray-300">
         Loading...
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex h-[calc(100%-50px)] w-full items-center justify-center text-red-500 dark:text-red-400">
-        {error}
       </div>
     );
   }
@@ -149,6 +146,7 @@ export default function HTMLToJSXComponent() {
         </div>
       </SettingsModal>
       <UploadModal acceptedFileTypes={"text/html"} />
+      <AlertModal message={error} />
     </div>
   );
 }
