@@ -31,60 +31,63 @@ export default function HTMLToJSXComponent() {
 
   // Convert html to jsx
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setError(null);
-        const response = await fetch("/api/html-to-jsx", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ html: sourceCode })
-        });
+    if (sourceCode) {
+      const fetchData = async () => {
+        try {
+          setError(null);
+          const response = await fetch("/api/html-to-jsx", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ html: sourceCode })
+          });
 
-        if (!response.ok) {
-          setError(response.statusText);
-          setIsLoading(false);
-          return;
-        }
+          if (!response.ok) {
+            setError(response.statusText);
+            setIsLoading(false);
+            return;
+          }
 
-        const result = await response.json();
+          const result = await response.json();
 
-        if (!result?.error) {
-          setIsLoading(false);
-          if (result?.jsx) {
-            // Apply function component template
-            if (settings.createFunction) {
-              setData(`export default function Foo() {
+          if (!result?.error) {
+            setIsLoading(false);
+            if (result?.jsx) {
+              // Apply function component template
+              if (settings.createFunction) {
+                setData(`export default function Foo() {
               return (
                 ${result.jsx}
                 );
               }`);
-              return;
-            }
+                return;
+              }
 
-            if (settings.createArrowFunction) {
-              setData(`const Foo = () => {
+              if (settings.createArrowFunction) {
+                setData(`const Foo = () => {
               return (
                 ${result.jsx}
                 );
               }
               export default Foo`);
-              return;
-            }
+                return;
+              }
 
-            setData(result.jsx);
+              setData(result.jsx);
+            }
+          } else {
+            setError(result.error);
+            setIsLoading(false);
           }
-        } else {
-          setError(result.error);
+        } catch (error) {
+          console.error(error);
+          setError("Failed to convert, please try again");
           setIsLoading(false);
         }
-      } catch (error) {
-        console.error(error);
-        setError("Failed to convert, please try again");
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
+      };
+      fetchData();
+    } else {
+      setError("Missing HTML code");
+    }
   }, [sourceCode, settings]);
 
   // Set initial default value and upload content for editor
