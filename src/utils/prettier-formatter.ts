@@ -1,4 +1,4 @@
-import prettier from "prettier/standalone";
+import prettier from "prettier";
 import parserBabel from "prettier/plugins/babel";
 import parserTypeScript from "prettier/plugins/typescript";
 import parserHtml from "prettier/plugins/html";
@@ -22,7 +22,8 @@ export const prettierFormatter = async ({
         parserTypeScript,
         parserHtml,
         parserCss,
-        parserEstree
+        parserEstree,
+        "@prettier/plugin-pug"
       ]
     });
 

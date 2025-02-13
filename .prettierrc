@@ -13,5 +13,6 @@
   "insertPragma": false,
   "proseWrap": "preserve",
   "htmlWhitespaceSensitivity": "css",
-  "endOfLine": "auto"
+  "endOfLine": "auto",
+  "plugins": ["@prettier/plugin-pug"]
 }
