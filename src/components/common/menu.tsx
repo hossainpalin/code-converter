@@ -7,10 +7,10 @@ import { cn } from "@/lib/utils";
 import { useSearchStore } from "@/store/search-store";
 
 interface IMenuProps {
-  onCloseAction: (isOpen: boolean) => void;
+  onCloseSidebarAction: () => void;
 }
 
-export default function Menu({ onCloseAction }: IMenuProps) {
+export default function Menu({ onCloseSidebarAction }: IMenuProps) {
   const { searchTerm, setSearchTerm, setSearchInputBox } = useSearchStore(
     (state) => state
   );
@@ -57,7 +57,7 @@ export default function Menu({ onCloseAction }: IMenuProps) {
         searchedRoutes.map(({ id, name, href, isActive }) => (
           <li
             onClick={() => {
-              onCloseAction(false);
+              onCloseSidebarAction();
               setSearchTerm("");
               setSearchInputBox("");
             }}
