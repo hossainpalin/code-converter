@@ -2,15 +2,14 @@
 
 import EditorPanel from "@/components/editor/editor-panel";
 import { ChangeEvent, useEffect, useState } from "react";
-import { HTMLTOJSX_DEFAULT_VALUE } from "@/constant/data";
 import { useEditorStore } from "@/store/editor-store";
 import { useUploadStore } from "@/store/upload-store";
 import UploadModal from "@/components/upload/modal";
 import SettingsModal from "@/components/settings/modal";
 import AlertModal from "@/components/alert/alert-modal";
-import isSvg from "is-svg";
+import { SVGTOJSX_DEFAULT_VALUE } from "@/constant/data";
 
-export default function HTMLToJSXComponent() {
+export default function SVGToJSXComponent() {
   const [data, setData] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<null | string>(null);
@@ -30,22 +29,16 @@ export default function HTMLToJSXComponent() {
     setSettings((prev) => ({ ...prev, [name]: checked }));
   };
 
-  // Convert html to jsx
+  // Convert svg to jsx
   useEffect(() => {
     if (sourceCode) {
-      // Check is svg code
-      if (isSvg(sourceCode)) {
-        setError("SVG code detected, try SVG to JSX converter");
-        setIsLoading(false);
-        return;
-      }
       const fetchData = async () => {
         try {
           setError(null);
-          const response = await fetch("/api/html-to-jsx", {
+          const response = await fetch("/api/svg-to-jsx", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ html: sourceCode })
+            body: JSON.stringify({ svg: sourceCode })
           });
 
           if (!response.ok) {
@@ -59,27 +52,35 @@ export default function HTMLToJSXComponent() {
           if (!result?.error) {
             setIsLoading(false);
             if (result?.jsx) {
+              let jsx = result.jsx;
               // Apply function component template
               if (settings.createFunction) {
-                setData(`export default function Foo() {
+                jsx = jsx.replace("<svg", "<svg {...props} ");
+                setData(`import * as React from "react";
+                
+                export default function SvgComponent(props) {
               return (
-                ${result.jsx}
+                ${jsx}
                 );
               }`);
                 return;
               }
 
               if (settings.createArrowFunction) {
-                setData(`const Foo = () => {
+                jsx = jsx.replace("<svg", "<svg {...props} ");
+                setData(`import * as React from "react";
+                
+                const SvgComponent = (props) => {
               return (
-                ${result.jsx}
+                ${jsx}
                 );
               }
-              export default Foo`);
+              
+              export default SvgComponent`);
                 return;
               }
 
-              setData(result.jsx);
+              setData(jsx);
             }
           } else {
             setError(result.error);
@@ -93,14 +94,14 @@ export default function HTMLToJSXComponent() {
       };
       fetchData();
     } else {
-      setError("Missing HTML code");
+      setError("Missing SVG code");
     }
   }, [sourceCode, settings]);
 
   // Set initial default value and upload content for editor
   useEffect(() => {
     const uploadedContent = uploadedFile || fetchedFile;
-    setSourceCode(uploadedContent || HTMLTOJSX_DEFAULT_VALUE);
+    setSourceCode(uploadedContent || SVGTOJSX_DEFAULT_VALUE);
   }, [setSourceCode, uploadedFile, fetchedFile]);
 
   if (isLoading) {
@@ -114,7 +115,7 @@ export default function HTMLToJSXComponent() {
   return (
     <div>
       <EditorPanel
-        editorTitle="HTML"
+        editorTitle="SVG"
         resultTitle="JSX"
         editorLanguage="html"
         resultLanguage="javascript"
@@ -155,7 +156,7 @@ export default function HTMLToJSXComponent() {
           </div>
         </div>
       </SettingsModal>
-      <UploadModal acceptedFileTypes={"text/html"} />
+      <UploadModal acceptedFileTypes={"text/svg"} />
       <AlertModal message={error} />
     </div>
   );

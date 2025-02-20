@@ -22,8 +22,7 @@ export const prettierFormatter = async ({
         parserTypeScript,
         parserHtml,
         parserCss,
-        parserEstree,
-        "@prettier/plugin-pug"
+        parserEstree
       ]
     });
 
