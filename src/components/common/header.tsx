@@ -43,7 +43,7 @@ export default function Header() {
           <Link
             data-tooltip-id="github-tooltip"
             className="rounded-lg bg-indigo-500/60 p-1.5 hover:bg-indigo-500"
-            href="/"
+            href="https://github.com/hossainpalin/code-converter"
           >
             <Image
               className="size-[18px]"

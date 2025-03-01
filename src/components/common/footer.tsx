@@ -12,7 +12,7 @@ export default function Footer() {
         Create by{" "}
         <Link
           className="text-indigo-700 underline dark:text-indigo-400"
-          href="/"
+          href="https://www.linkedin.com/in/hossainpalin"
         >
           Hossain M Palin
         </Link>
